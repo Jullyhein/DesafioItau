@@ -58,3 +58,8 @@ A senha é considerada válida se possuir:
 ```text
 Olá mundo. 
 ```
+
+### ESCOLHA DE LINGUAGEM E ESQUELETO:
+- Escolhi o Java por ser 100% orientado a objetos, ser uma linguagem na qual eu estou me aperfeiçoando, e eu poder dividir os requests e response separadamente no DTO para ter melhor compreensão dos dados que vão ser solicitados e respondidos através da API (Controller). Deixo os comentários em todas as pastas para ficar melhor o entendimento do que eu pensei em fazer. Criei um Service para ter a regra de negócios separadas do Controller que é o que controla as ações da minha API com base no que eu criei no DTO, Service.
+
+- Temos testes também para que possamos testar cada uma das rotas. Principalmente a rota da senha tanto a qual precisa ser válida e inválida também. 
