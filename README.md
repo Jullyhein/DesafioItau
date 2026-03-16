@@ -60,6 +60,15 @@ Olá mundo.
 ```
 
 ### ESCOLHA DE LINGUAGEM E ESQUELETO:
-- Escolhi o Java por ser 100% orientado a objetos, ser uma linguagem na qual eu estou me aperfeiçoando, e eu poder dividir os requests e response separadamente no DTO para ter melhor compreensão dos dados que vão ser solicitados e respondidos através da API (Controller). Deixo os comentários em todas as pastas para ficar melhor o entendimento do que eu pensei em fazer. Criei um Service para ter a regra de negócios separadas do Controller que é o que controla as ações da minha API com base no que eu criei no DTO, Service.
+- Escolhi o Java por ser 100% orientado a objetos, ser uma linguagem na qual eu estou me aperfeiçoando, e eu poder dividir os requests e response separadamente no DTO para ter melhor compreensão dos dados que vão ser solicitados e respondidos através da API (Controller). Deixo os comentários em todas as pastas para ficar melhor o entendimento do que eu pensei em fazer.
 
+- Criei um Service para ter a regra de negócios separadas do Controller que é o que controla as ações da minha API com base no que eu criei no DTO, Service. No service eu realizei as validações necessárias para verificar as senhas que serão passadas, o que são nulos, falso etc, utilizei métodos do próprio java para validações criando um loop para isso e retornando o que precisa pra ser true:
+hasDigit && hasLower && hasUpper && hasSpecial.
+
+- No DTO criei um response para criar uma classe que me retorne a resposta se é um boolean ou não e a mensagem que eu queria que tivesse para o usuário e um request para solicitar uma senha e o record é para dizer que ali será um JSON.
+
+- No Controller criei uma rota para verificar no terminal com o log se estaria passando, coloquei log pra verificar no terminal como não temos frontend é assim que verifico que se está funcionando algo quando estou ligando o backend e testando no postman.
+
+- Em seguida uma rota POST pois o usuário vai escrever a senha para validação, utilizei o ResponseEntity<PasswordResponse> para que possa validar o body da tratativa e me retornar a mensagem e se é valida ou não.
+  
 - Temos testes também para que possamos testar cada uma das rotas. Principalmente a rota da senha tanto a qual precisa ser válida e inválida também. 
