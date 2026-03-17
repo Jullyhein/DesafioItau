@@ -6,7 +6,9 @@ Esta é uma solução para o desafio de validação de senhas, desenvolvida como
 - **Java 17+**
 - **Spring Boot 3.x**
 - **Maven**
-- **JUnit 5** (Testes Unitários)
+- **PostgreSQL (Persistência de dados)**
+- **Spring Data JPA (ORM)**
+- **Mockito & JUnit 5** (Testes Unitários)
 
 ##  Critérios de Validação
 A senha é considerada válida se possuir:
@@ -24,7 +26,29 @@ A senha é considerada válida se possuir:
 - **DTO Pattern:** Uso de `Records` para transferência de dados entre camadas.
 - **Injeção de Dependência:** Desacoplamento entre o Controller e o Service.
 - **Coesão e Acoplamento:** Lógica de negócio isolada na camada de serviço, facilitando a manutenção e testes.
-- **Utilização de log:** Utilização de log no código para visualizar tipos de erros no terminal.  
+- **Utilização de log:** Utilização de log no código para visualizar tipos de erros no terminal.
+- **Persistência & Auditoria:** Histórico de validações salvo no banco de dados com timestamp.
+- **Testes com Mocks:** Uso do Mockito para isolar o PasswordService de dependências externas durante os testes unitários.
+
+
+## Persistência de Dados (PostgreSQL)
+### A aplicação registra cada tentativa no banco desafioitau
+- **Tabela:** th_password_history (ou tb_password_history).
+- **Campos:** id, password, is_valid, created_at. 
+
+A API foi integrada ao PostgreSQL para garantir a rastreabilidade das operações. Cada tentativa de validação é persistida automaticamente, permitindo auditorias futuras e análise de padrões de senhas.
+- Tecnologias: Spring Data JPA & Hibernate.
+- Padrão de Projeto: Repository Pattern para isolamento da camada de acesso a dados.
+- Gestão de Schema: Utilização do Hibernate DDL para sincronização automática entre Entidades Java e Tabelas SQL.
+
+Estrutura da Tabela (th_password_history):
+
+| Campo | Tipo | Descrição |
+| :--- | :--- | :--- |
+| **id** | BIGINT | Identificador único (Primary Key). |
+| **password** | VARCHAR | Conteúdo da senha validada. |
+| **is_valid** | BOOLEAN | Status do resultado (True para aprovada). |
+| **created_at** | TIMESTAMP | Registro temporal da validação. |
 
 ## Como Testar a API
 ### Estar na raíz de teste
@@ -35,6 +59,16 @@ A senha é considerada válida se possuir:
 - Precisa estar na raiz que é a pasta: cd DesafioItau
 - E roda: .\mvnw spring-boot:run
 
+
+## Como Rodar Localmente (Banco de Dados)
+spring.datasource.url=jdbc:postgresql://localhost:5432/desafioitau
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+
+# Resultado do BD:
+![img.png](img.png)
+
+ 
 ### 1. Validar Senha (POST)
 ### Abrir o url no postman para testar
 **URL:** `http://localhost:8080/v1/password/validate`  
@@ -52,6 +86,9 @@ A senha é considerada válida se possuir:
   "isValid": true
 }
 ````
+![img_1.png](img_1.png)
+
+
 ### 2. Teste de Funcionamento (GET)
 **URL:** `http://localhost:8080/v1/password/hello`  
 **Body (Text):**
@@ -72,3 +109,20 @@ hasDigit && hasLower && hasUpper && hasSpecial.
 - Em seguida uma rota POST pois o usuário vai escrever a senha para validação, utilizei o ResponseEntity<PasswordResponse> para que possa validar o body da tratativa e me retornar a mensagem e se é valida ou não.
   
 - Temos testes também para que possamos testar cada uma das rotas. Principalmente a rota da senha tanto a qual precisa ser válida e inválida também. 
+
+- Utilizei o teste mockito para utilização do banco de dados e o JPARepository.
+
+### Estratégia de Testes Automatizados:
+- JUnit 5: Framework principal para execução dos testes.
+
+- Mockito: Utilizado para criar Mocks do PasswordRepository. Isso permite testar o PasswordService de forma isolada, simulando o comportamento do banco de dados na memória.
+
+- Testes Parametrizados: Uso de @ParameterizedTest para validar múltiplos cenários de senhas inválidas em um único método, aumentando a cobertura de código com menor verbosidade.
+
+### Exemplo de Consulta para Auditoria:
+- Verificar as últimas 10 senhas validadas com sucesso:
+
+SELECT * FROM th_password_history
+WHERE is_valid = true
+ORDER BY created_at DESC
+LIMIT 10;

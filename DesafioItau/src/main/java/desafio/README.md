@@ -6,7 +6,7 @@ Esta é uma solução para o desafio de validação de senhas, desenvolvida como
 - **Java 17+**
 - **Spring Boot 3.x**
 - **Maven**
-- **JUnit 5** (Testes Unitários)
+- **Mockito & JUnit 5** (Testes Unitários)
 
 ##  Critérios de Validação
 A senha é considerada válida se possuir:
@@ -25,6 +25,13 @@ A senha é considerada válida se possuir:
 - **Injeção de Dependência:** Desacoplamento entre o Controller e o Service.
 - **Coesão e Acoplamento:** Lógica de negócio isolada na camada de serviço, facilitando a manutenção e testes.
 - **Utilização de log:** Utilização de log no código para visualizar tipos de erros no terminal.  
+- **Persistência & Auditoria:** Histórico de validações salvo no banco de dados com timestamp.
+- **Testes com Mocks:** Uso do Mockito para isolar o PasswordService de dependências externas durante os testes unitários.
+
+## Persistência de Dados (PostgreSQL)
+### A aplicação registra cada tentativa no banco desafioitau
+- **Tabela:** th_password_history (ou tb_password_history).
+- **Campos:** id, password, is_valid, created_at.
 
 ## Como Testar a API
 ### Estar na raíz de teste
