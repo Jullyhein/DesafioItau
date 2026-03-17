@@ -62,7 +62,9 @@ Estrutura da Tabela (th_password_history):
 
 ## Como Rodar Localmente (Banco de Dados)
 spring.datasource.url=jdbc:postgresql://localhost:5432/desafioitau
+
 spring.datasource.username=seu_usuario
+
 spring.datasource.password=sua_senha
 
 # Resultado do BD:
